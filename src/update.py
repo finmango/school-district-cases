@@ -98,7 +98,7 @@ def convert_to_geojson(data: DataFrame) -> Dict[str, Any]:
     data = data.sort_values("date")
     data["date"] = data["date"].fillna("9999-99-99")
     data = data.groupby(["state", "district_id", "date"]).last().reset_index()
-    data["date"] = data["date"].str.replace("9999-99-99", "")
+    data.loc[data["date"] == "9999-99-99", "date"] = None
 
     # Iterate over each row and convert it to GeoJSON type
     records = []
