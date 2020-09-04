@@ -7,7 +7,7 @@ import traceback
 import warnings
 from functools import partial
 from pathlib import Path
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, Iterable, List
 
 import yaml
 from pandas import DataFrame, Int32Dtype, concat, isna, read_csv
@@ -17,26 +17,31 @@ ROOT = Path(os.path.dirname(__file__))
 
 
 def table_rename(data: DataFrame, column_adapter: Dict[str, str]) -> DataFrame:
+    """Rename all columns of a dataframe and drop the columns not in the adapter."""
     data = data.rename(columns=column_adapter)
     data = data.drop(columns=[col for col in data.columns if col not in column_adapter.values()])
     return data
 
 
 def load_config(config_path: str) -> Dict[str, Any]:
+    """Load a YAML configuration file given its path."""
     with open(config_path, "r") as fh:
         config_yaml = yaml.safe_load(fh)
     return config_yaml
 
 
-def nullable_method_call(func: Callable, *args, **kwargs):
+def nullable_method_call(func: Callable, *args, print_exc: bool = True, **kwargs) -> Any:
+    """Return the output of calling the provided `func`, default to `None` in case of failure."""
     try:
         return func(*args, **kwargs)
-    except Exception:
-        # traceback.print_exc()
+    except:
+        if print_exc:
+            traceback.print_exc()
         return None
 
 
 def convert_dtype(schema: Dict[str, str], data: DataFrame) -> DataFrame:
+    """Convert all columns in `data` to the appropriate dtype according to `schema`."""
     df = DataFrame(index=data.index)
     for column_name, dtype in schema.items():
         if column_name not in data.columns:
@@ -44,17 +49,18 @@ def convert_dtype(schema: Dict[str, str], data: DataFrame) -> DataFrame:
         elif dtype == "str":
             df[column_name] = data[column_name]
         elif dtype == "float":
-            column_data = data[column_name].apply(partial(nullable_method_call, float))
-            df[column_name] = column_data.astype(float)
+            apply_func = partial(nullable_method_call, float, print_exc=False)
+            df[column_name] = data[column_name].apply(apply_func).astype(float)
         elif dtype == "int":
-            column_data = data[column_name].apply(partial(nullable_method_call, int))
-            df[column_name] = column_data.astype(Int32Dtype())
+            apply_func = partial(nullable_method_call, int, print_exc=False)
+            df[column_name] = data[column_name].apply(apply_func).astype(Int32Dtype())
         else:
             raise TypeError(f"Unknown dtype {dtype}")
     return df
 
 
 def read_data(schema: Dict[str, str], url: str) -> DataFrame:
+    """Read all CSV data from `url` into a dataframe and use `schema` to determine dtype."""
     data = read_csv(url, dtype=str, skiprows=1)
     data.columns = [col.strip() for col in data.columns]
     column_adapter = {
@@ -79,7 +85,19 @@ def read_data(schema: Dict[str, str], url: str) -> DataFrame:
     return data.dropna(subset=["date", "district_id"])
 
 
+def load_all_data(config: Dict[str, Any]) -> Iterable[DataFrame]:
+    """Load all data tables defined by the provided config file."""
+    for source in config["sources"]:
+        try:
+            yield read_data(config["schema"], source["url"])
+            print(f"Data successfully downloaded from {source['state']}: {source['url']}")
+        except:
+            print(f"Failed to process data from {source['state']}: {source['url']}")
+            traceback.print_exc()
+
+
 def read_metadata(config: Dict[str, Any]) -> DataFrame:
+    """Read the metadata file defined in the provided config file."""
     column_adapter = {
         "STATECODE": "state",
         "GEOID": "district_id",
@@ -94,6 +112,7 @@ def read_metadata(config: Dict[str, Any]) -> DataFrame:
 
 
 def convert_to_geojson(data: DataFrame) -> Dict[str, Any]:
+    """Convert the dataframe into a set GeoJSON records."""
     # Our desired GeoJSON format only has the latest datapoint for each district
     data = data.sort_values("date")
     data["date"] = data["date"].fillna("9999-99-99")
@@ -121,19 +140,12 @@ def convert_to_geojson(data: DataFrame) -> Dict[str, Any]:
 
 
 def main():
+    """Main entrypoint."""
+    # Read local configuration file
     config = load_config(ROOT / "config.yaml")
 
     # Read all the case files and put them into a single table
-    cases = []
-    for source in config["sources"]:
-        try:
-            cases.append(read_data(config["schema"], source["url"]))
-            print(f"Data successfully downloaded from {source['state']}: {source['url']}")
-        except Exception:
-            print(f"Failed to process data from {source['state']}: {source['url']}")
-            traceback.print_exc()
-
-    cases = concat(cases)
+    cases = concat(load_all_data(config))
 
     # Add metadata information to all records
     data = read_metadata(config["metadata"])
