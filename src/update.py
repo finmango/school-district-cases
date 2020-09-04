@@ -85,7 +85,7 @@ def read_data(schema: Dict[str, str], url: str) -> DataFrame:
     return data.dropna(subset=["date", "district_id"])
 
 
-def load_all_data(config: Dict[str, Any]) -> Iterable[DataFrame]:
+def data_source_iterator(config: Dict[str, Any]) -> Iterable[DataFrame]:
     """Load all data tables defined by the provided config file."""
     for source in config["sources"]:
         try:
@@ -145,7 +145,7 @@ def main():
     config = load_config(ROOT / "config.yaml")
 
     # Read all the case files and put them into a single table
-    cases = concat(load_all_data(config))
+    cases = concat(data_source_iterator(config))
 
     # Add metadata information to all records
     data = read_metadata(config["metadata"])
