@@ -16,6 +16,8 @@ metadata:
 sources:
     - state: AR
       url: https://docs.google.com/spreadsheets/d/e/2PACX-1vROa6-sSZd5E40iQqefgb156y5hIZmvwES-YhrWieXyYEKbu1Q8Nxxv-mcVNTrhBpUJCnxcz0YKFbPR/pub?gid=0&single=true&output=csv
+    - state: FL
+      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQoc6B85lpM3I_Pd1GLGtg2SyQlrBlkmENZGML0BPBSK9DlA2oBnMw1y8te9lLdtswIoAFKaxEGVc2Q/pub?gid=1771805424&single=true&output=csv
     - state: GA
       url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9f04vzGu_us-8M_3hx0fbcq9zN5jAXJ87qSOIQdHgCXXtaMoudEtMaI2sB6lzjoop84hh0xcOoXYU/pub?gid=1094833013&single=true&output=csv
     - state: HI
