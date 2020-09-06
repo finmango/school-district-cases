@@ -81,6 +81,9 @@ def read_data(schema: Dict[str, str], url: str) -> DataFrame:
         col in data.columns for col in list(column_adapter.values())[:6]
     ), f"Not all the expected columns we found for {url}"
 
+    # Get rid of data without a district ID
+    data = data[data["district_id"].notna()]
+
     data = convert_dtype(schema, data)
     return data.dropna(subset=["date", "district_id"])
 
