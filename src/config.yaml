@@ -11,7 +11,8 @@ schema:
     source: str
 
 metadata:
-    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vSfTEYXDiLrEw42lUDnhu7peCxqjx_9I-8zMBmpa1QdlmWCJGA1R8W21vNZUrAuu8HoTynXk7eo5Obg/pub?gid=1819798616&single=true&output=csv
+  geo: https://docs.google.com/spreadsheets/d/e/2PACX-1vSfTEYXDiLrEw42lUDnhu7peCxqjx_9I-8zMBmpa1QdlmWCJGA1R8W21vNZUrAuu8HoTynXk7eo5Obg/pub?gid=1819798616&single=true&output=csv
+  nces: https://docs.google.com/spreadsheets/d/e/2PACX-1vSfTEYXDiLrEw42lUDnhu7peCxqjx_9I-8zMBmpa1QdlmWCJGA1R8W21vNZUrAuu8HoTynXk7eo5Obg/pub?gid=243950450&single=true&output=csv
 
 sources:
     - state: AR
@@ -30,3 +31,5 @@ sources:
       url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTQ-JtInD75uK242hc1zfp8mgZyXydibJwTI2PqpdM2U9gbCnCgC29BrNnKPA9heamx7F4KMhF3dVSP/pub?gid=1265692124&single=true&output=csv
     - state: MS
       url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2BNpGAqDy9RZ_y1B7bRD3YPl4cxfzzyIlKfqzECUMDqR9wN-O_ygfMRHyLaCmgpmNdBEoESgAp7Rv/pub?gid=1966205140&single=true&output=csv
+    - state: SC
+      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTs35RuApiN5tw_5P5pPdNjceZxIvZlO-jAad0HG-fomm4ri-AIMhPapUL7v0fJkpSd0hgo5Lg7mZ4x/pub?gid=862726822&single=true&output=csv
