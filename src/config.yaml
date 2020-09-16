@@ -1,35 +1,41 @@
 schema:
-    date: str
-    district_id: str
-    district_name: str
-    new_student_cases: int
-    cumulative_student_cases: int
-    new_staff_cases: int
-    cumulative_staff_cases: int
-    new_unspecified_cases: int
-    cumulative_unspecified_cases: int
-    source: str
+  date: str
+  district_id: str
+  district_name: str
+  new_student_cases: int
+  cumulative_student_cases: int
+  new_staff_cases: int
+  cumulative_staff_cases: int
+  new_unspecified_cases: int
+  cumulative_unspecified_cases: int
+  source: str
 
 metadata:
   geo: https://docs.google.com/spreadsheets/d/e/2PACX-1vSfTEYXDiLrEw42lUDnhu7peCxqjx_9I-8zMBmpa1QdlmWCJGA1R8W21vNZUrAuu8HoTynXk7eo5Obg/pub?gid=1819798616&single=true&output=csv
   nces: https://docs.google.com/spreadsheets/d/e/2PACX-1vSfTEYXDiLrEw42lUDnhu7peCxqjx_9I-8zMBmpa1QdlmWCJGA1R8W21vNZUrAuu8HoTynXk7eo5Obg/pub?gid=243950450&single=true&output=csv
 
 sources:
-    - state: AR
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vROa6-sSZd5E40iQqefgb156y5hIZmvwES-YhrWieXyYEKbu1Q8Nxxv-mcVNTrhBpUJCnxcz0YKFbPR/pub?gid=0&single=true&output=csv
-    - state: FL
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQoc6B85lpM3I_Pd1GLGtg2SyQlrBlkmENZGML0BPBSK9DlA2oBnMw1y8te9lLdtswIoAFKaxEGVc2Q/pub?gid=1771805424&single=true&output=csv
-    - state: GA
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9f04vzGu_us-8M_3hx0fbcq9zN5jAXJ87qSOIQdHgCXXtaMoudEtMaI2sB6lzjoop84hh0xcOoXYU/pub?gid=1094833013&single=true&output=csv
-    - state: HI
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQB9XsVW1WWvVZJQllXp71IzBS2M_3GRhO5zpAFZdu9Z8jvlBBkhL1ZvNq298gpRUfxd1B0aRxV7Bwv/pub?gid=1094833013&single=true&output=csv
-    - state: IA
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vS0UTzyO87STPsMlTzN-zKTNLTCiHT9DkZNbVwQXalt0GsTvnDFh3hulr-hXSY2Fdi2VZCuhKetZxbP/pub?gid=1094833013&single=true&output=csv
-    - state: IN
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vS_8WGXmXo6uA2KA6gN1L6i6QLmIcaCGC1ASKGou0S6HhjdqQuI3gwH1aHqESD_Fv9jAl6sKHRFXOIf/pub?gid=1094833013&single=true&output=csv
-    - state: KY
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTQ-JtInD75uK242hc1zfp8mgZyXydibJwTI2PqpdM2U9gbCnCgC29BrNnKPA9heamx7F4KMhF3dVSP/pub?gid=1265692124&single=true&output=csv
-    - state: MS
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2BNpGAqDy9RZ_y1B7bRD3YPl4cxfzzyIlKfqzECUMDqR9wN-O_ygfMRHyLaCmgpmNdBEoESgAp7Rv/pub?gid=1966205140&single=true&output=csv
-    - state: SC
-      url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTs35RuApiN5tw_5P5pPdNjceZxIvZlO-jAad0HG-fomm4ri-AIMhPapUL7v0fJkpSd0hgo5Lg7mZ4x/pub?gid=862726822&single=true&output=csv
+  - state: AL
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQo_1eVqE-utKZXavEKbxpMaY1hLYoxRcALE8KUGWU4iFg5PQP1X8lrcGjJjkeJzGGDD0YqZ1wLARbK/pub?gid=1829838085&single=true&output=csv
+  - state: AR
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vROa6-sSZd5E40iQqefgb156y5hIZmvwES-YhrWieXyYEKbu1Q8Nxxv-mcVNTrhBpUJCnxcz0YKFbPR/pub?gid=0&single=true&output=csv
+  - state: FL
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQoc6B85lpM3I_Pd1GLGtg2SyQlrBlkmENZGML0BPBSK9DlA2oBnMw1y8te9lLdtswIoAFKaxEGVc2Q/pub?gid=1771805424&single=true&output=csv
+  - state: GA
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9f04vzGu_us-8M_3hx0fbcq9zN5jAXJ87qSOIQdHgCXXtaMoudEtMaI2sB6lzjoop84hh0xcOoXYU/pub?gid=1094833013&single=true&output=csv
+  - state: HI
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQB9XsVW1WWvVZJQllXp71IzBS2M_3GRhO5zpAFZdu9Z8jvlBBkhL1ZvNq298gpRUfxd1B0aRxV7Bwv/pub?gid=1094833013&single=true&output=csv
+  - state: IA
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vS0UTzyO87STPsMlTzN-zKTNLTCiHT9DkZNbVwQXalt0GsTvnDFh3hulr-hXSY2Fdi2VZCuhKetZxbP/pub?gid=1094833013&single=true&output=csv
+  - state: IN
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vS_8WGXmXo6uA2KA6gN1L6i6QLmIcaCGC1ASKGou0S6HhjdqQuI3gwH1aHqESD_Fv9jAl6sKHRFXOIf/pub?gid=1094833013&single=true&output=csv
+  - state: KY
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTQ-JtInD75uK242hc1zfp8mgZyXydibJwTI2PqpdM2U9gbCnCgC29BrNnKPA9heamx7F4KMhF3dVSP/pub?gid=1265692124&single=true&output=csv
+  - state: MS
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vQ2BNpGAqDy9RZ_y1B7bRD3YPl4cxfzzyIlKfqzECUMDqR9wN-O_ygfMRHyLaCmgpmNdBEoESgAp7Rv/pub?gid=1966205140&single=true&output=csv
+  - state: OK
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTIXGR5JxtZVfGc-hlgXynyx6OPFV2yDdLxCjmxHd264gnyjZAx-hu3lbJZiHrQwkDmdYR95-A2UHp6/pub?gid=1094833013&single=true&output=csv
+  - state: SC
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTs35RuApiN5tw_5P5pPdNjceZxIvZlO-jAad0HG-fomm4ri-AIMhPapUL7v0fJkpSd0hgo5Lg7mZ4x/pub?gid=862726822&single=true&output=csv
+  - state: TX
+    url: https://docs.google.com/spreadsheets/d/e/2PACX-1vTQi0NswubbxAtPURasbU7sTTcSubC6oA5IYYU3aPzgZPBth7UW6eAauQIbyYkXwaQ9huBrR17RF9H3/pub?gid=1094833013&single=true&output=csv
