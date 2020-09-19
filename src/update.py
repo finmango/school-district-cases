@@ -187,7 +187,7 @@ def main():
 
     # Add metadata information to all records
     metadata = read_metadata(config["metadata"])
-    data = metadata.merge(cases, how="inner", on=["district_id"])
+    data = metadata.merge(cases, how="outer", on=["district_id"])
 
     # Spit out errors for cases without matching metadata
     for _, record in data[data["district_name"].isna()].iterrows():
