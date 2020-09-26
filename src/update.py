@@ -2,9 +2,9 @@
 
 import datetime
 import json
+import logging
 import os
 import traceback
-import warnings
 from functools import partial
 from pathlib import Path
 from typing import Any, Callable, Dict, Iterable, List
@@ -67,7 +67,7 @@ def parse_district_id(district_id: str) -> str:
     return f"{int(district_id):07d}"
 
 
-def read_data(schema: Dict[str, str], url: str) -> DataFrame:
+def read_data(schema: Dict[str, str], state: str, url: str) -> DataFrame:
     """Read all CSV data from `url` into a dataframe and use `schema` to determine dtype."""
     data = read_csv(url, dtype=str, skiprows=1)
     data.columns = [col.strip() for col in data.columns]
@@ -85,66 +85,58 @@ def read_data(schema: Dict[str, str], url: str) -> DataFrame:
     data = table_rename(data, column_adapter)
 
     # Make sure data has at least the core columns
-    assert all(
-        col in data.columns for col in list(column_adapter.values())[:6]
-    ), f"Not all the expected columns we found for {url}"
+    missing_columns = set(list(column_adapter.values())[:-1]) - set(data.columns)
+    assert len(missing_columns) == 0, f"Missing columns {missing_columns} for {state}."
 
-    # Get rid of data without a district ID
+    # Keep only data with date and district ID
     data["district_id"] = data["district_id"].fillna(UNKNOWN_DISTRICT_ID).apply(parse_district_id)
-    data = data[data["district_id"].notna()]
+    data = data.dropna(subset=["date", "district_id"])
 
-    data = convert_dtype(schema, data)
-    return data.dropna(subset=["date", "district_id"])
+    # Add a state column to all records
+    data["state"] = state
+
+    # Get rid of data without any known cases
+    case_columns = list(column_adapter.values())[2:-1]
+    data = data.dropna(subset=case_columns, how="all")
+
+    # Warn if the data is empty
+    if len(data) == 0:
+        logging.warning(f"State {state} has zero records.")
+
+    # Return data with the appropriate type
+    return convert_dtype(schema, data)
 
 
 def data_source_iterator(config: Dict[str, Any]) -> Iterable[DataFrame]:
     """Load all data tables defined by the provided config file."""
     for source in config["sources"]:
         try:
-            yield read_data(config["schema"], source["url"])
+            yield read_data(config["schema"], source["state"], source["url"])
             print(f"Data successfully downloaded for {source['state']}: {source['url']}")
         except:
-            print(f"Failed to process data for {source['state']}: {source['url']}")
-            traceback.print_exc()
+            log_msg = f"Failed to process data for {source['state']}: {source['url']}"
+            logging.error(log_msg, exc_info=True)
 
 
 def read_metadata(config: Dict[str, Any]) -> DataFrame:
     """Read the metadata file defined in the provided config file."""
-    column_adapter = {
-        "STATECODE": "state",
-        "GEOID": "district_id",
-        "NAME": "district_name",
-        "INTPTLAT": "latitude",
-        "INTPTLON": "longitude",
-    }
-    geo = read_csv(config["geo"], dtype=str)
-    geo = table_rename(geo, column_adapter)
-    geo.latitude = geo.latitude.str.replace("+", "")
-    geo["district_id"] = geo["district_id"].apply(parse_district_id)
-
-    nces = read_csv(config["nces"], dtype=str)
-    nces["district_id"] = nces["district_id"].apply(parse_district_id)
-    nces = nces[
-        [
-            "district_id",
-            "district_name",
-            "state",
-            "county_name",
-            "student_count",
-            "teacher_count",
-            "school_count",
-        ]
+    columns = [
+        "district_id",
+        "state",
+        "district_name",
+        "longitude",
+        "latitude",
+        "county_name",
+        "street_address",
+        "city",
+        "zip_code",
+        "phone",
+        "student_count",
+        "teacher_count",
+        "school_count",
     ]
-
-    # Put all sources of metadata into a single table
-    metadata = geo.merge(nces, how="outer", on=["district_id"], suffixes=(".1", ".2"))
-
-    # Use the district name / state from whichever table has it
-    for shared_column in ("district_name", "state"):
-        column_1 = metadata[f"{shared_column}.1"]
-        column_2 = metadata[f"{shared_column}.2"]
-        metadata[shared_column] = column_1.fillna(column_2)
-        metadata.drop(columns=[f"{shared_column}.1", f"{shared_column}.2"], inplace=True)
+    metadata = read_csv(config["districts"], dtype=str, usecols=columns)
+    metadata.district_id = metadata.district_id.apply(parse_district_id)
 
     return metadata
 
@@ -187,11 +179,11 @@ def main():
 
     # Add metadata information to all records
     metadata = read_metadata(config["metadata"])
-    data = metadata.merge(cases, how="outer", on=["district_id"])
+    data = cases.merge(metadata, how="left", on=["district_id", "state"])
 
     # Spit out errors for cases without matching metadata
     for _, record in data[data["district_name"].isna()].iterrows():
-        warnings.warn(f"Record without metadata: {record.to_dict()}")
+        logging.warning(f"Record without metadata: {record.to_dict()}")
 
     # Sort the data by state and district
     data = data.sort_values(["state", "district_id", "date"])
