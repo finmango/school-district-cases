@@ -64,7 +64,11 @@ def convert_dtype(schema: Dict[str, str], data: DataFrame) -> DataFrame:
 
 def parse_district_id(district_id: str) -> str:
     """Ensure that `district_id` is a 7-digit string."""
-    return f"{int(district_id):07d}"
+    try:
+        return f"{int(district_id):07d}"
+    except:
+        logging.error(f"Unknown district {district_id}")
+        return None
 
 
 def read_data(schema: Dict[str, str], state: str, url: str) -> DataFrame:
