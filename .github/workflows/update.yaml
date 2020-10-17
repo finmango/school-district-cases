@@ -13,7 +13,7 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    container: python
+    container: python:3.8
 
     steps:
       - uses: actions/checkout@v2
