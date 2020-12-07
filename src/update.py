@@ -124,22 +124,21 @@ def data_source_iterator(config: Dict[str, Any]) -> Iterable[DataFrame]:
 
 def read_metadata(config: Dict[str, Any]) -> DataFrame:
     """Read the metadata file defined in the provided config file."""
-    columns = [
-        "district_id",
-        "state",
-        "district_name",
-        "longitude",
-        "latitude",
-        "county_name",
-        "street_address",
-        "city",
-        "zip_code",
-        "phone",
-        "student_count",
-        "teacher_count",
-        "school_count",
-    ]
-    metadata = read_csv(config["districts"], dtype=str, usecols=columns)
+    metadata_adapter = {
+        "district_id": "district_id",
+        "state": "state",
+        "district_name": "district_name",
+        "longitude": "longitude",
+        "latitude": "latitude",
+        "County Name*": "county_name",
+        "City": "city",
+        "ZIP": "zip_code",
+        "Students": "student_count",
+        "Teachers": "teacher_count",
+        "Schools": "school_count",
+    }
+    metadata = read_csv(config["districts"], dtype=str, usecols=metadata_adapter.keys())
+    metadata = metadata.rename(columns=metadata_adapter)
     metadata.district_id = metadata.district_id.apply(parse_district_id)
 
     return metadata
@@ -186,8 +185,10 @@ def main():
     data = cases.merge(metadata, how="left", on=["district_id", "state"])
 
     # Spit out errors for cases without matching metadata
-    for _, record in data[data["district_name"].isna()].iterrows():
+    match_mask = data["district_name"].notna()
+    for _, record in data[~match_mask].iterrows():
         logging.warning(f"Record without metadata: {record.to_dict()}")
+    data = data[match_mask]
 
     # Sort the data by state and district
     data = data.sort_values(["state", "district_id", "date"])

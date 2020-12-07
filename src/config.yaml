@@ -12,9 +12,7 @@ schema:
   source: str
 
 metadata:
-  geo: https://docs.google.com/spreadsheets/d/e/2PACX-1vSfTEYXDiLrEw42lUDnhu7peCxqjx_9I-8zMBmpa1QdlmWCJGA1R8W21vNZUrAuu8HoTynXk7eo5Obg/pub?gid=1819798616&single=true&output=csv
-  nces: https://docs.google.com/spreadsheets/d/e/2PACX-1vSfTEYXDiLrEw42lUDnhu7peCxqjx_9I-8zMBmpa1QdlmWCJGA1R8W21vNZUrAuu8HoTynXk7eo5Obg/pub?gid=243950450&single=true&output=csv
-  districts: https://docs.google.com/spreadsheets/d/e/2PACX-1vSfTEYXDiLrEw42lUDnhu7peCxqjx_9I-8zMBmpa1QdlmWCJGA1R8W21vNZUrAuu8HoTynXk7eo5Obg/pub?gid=1853671376&single=true&output=csv
+  districts: https://docs.google.com/spreadsheets/d/e/2PACX-1vTQDpUa5r6QGkg3_GZBMmXWAkZfS5vdAKbVJMdLfrvTZMzODR46NTEI_VAackSj1jXZGfWSH2sQJmua/pub?gid=519663355&single=true&output=csv
 
 sources:
   - state: AL
